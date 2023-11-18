@@ -38,6 +38,8 @@ public static class ColumnUtils
             ColumnType.Real => reader.ReadDouble(),
             ColumnType.Char => reader.ReadChar(),
             ColumnType.String => reader.ReadString(),
+            ColumnType.DateTime => throw new NotImplementedException(),
+            ColumnType.DateInterval => throw new NotImplementedException(),
             _ => throw new ArgumentOutOfRangeException()
         };
     }

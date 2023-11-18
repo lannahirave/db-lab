@@ -108,6 +108,7 @@
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new Size(121, 23);
             comboBox1.TabIndex = 6;
+            comboBox1.SelectedIndex = 0;
             // 
             // label2
             // 
@@ -126,6 +127,10 @@
             button1.TabIndex = 6;
             button1.Text = "Видалити";
             button1.UseVisualStyleBackColor = true;
+            button1.Click += (o, args) =>
+            {
+                tableLayoutPanel1.Controls.Remove(tableLayoutPanel2);
+            };
             // 
             // textBox1
             // 

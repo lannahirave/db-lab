@@ -1,10 +1,9 @@
 ﻿using System.IO.Abstractions;
 
-namespace WinFormsApp1
+namespace WinFormsApp1;
+
+internal static class Utility
 {
-    internal static class Utility
-    {
-        public static readonly IFileSystem Filesystem = new FileSystem();
+    public static readonly IFileSystem Filesystem = new FileSystem();
         
-    }
 }

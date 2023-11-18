@@ -30,14 +30,16 @@
         {
             dbInfo = new TextBox();
             addTableToDb = new Button();
-            tableLayoutPanel1 = new TableLayoutPanel();
+            tableLayoutWhereTablesDisplay = new TableLayoutPanel();
+            SaveDb = new Button();
+            CloseDb = new Button();
             SuspendLayout();
             // 
             // dbInfo
             // 
             dbInfo.Enabled = false;
             dbInfo.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point);
-            dbInfo.Location = new Point(237, 12);
+            dbInfo.Location = new Point(172, 12);
             dbInfo.Multiline = true;
             dbInfo.Name = "dbInfo";
             dbInfo.Size = new Size(306, 86);
@@ -45,7 +47,7 @@
             // 
             // addTableToDb
             // 
-            addTableToDb.Location = new Point(292, 104);
+            addTableToDb.Location = new Point(220, 104);
             addTableToDb.Name = "addTableToDb";
             addTableToDb.Size = new Size(196, 23);
             addTableToDb.TabIndex = 1;
@@ -53,25 +55,48 @@
             addTableToDb.UseVisualStyleBackColor = true;
             addTableToDb.Click += CreateTable;
             // 
-            // tableLayoutPanel1
+            // tableLayoutWhereTablesDisplay
             // 
-            tableLayoutPanel1.ColumnCount = 2;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 80F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
-            tableLayoutPanel1.Location = new Point(237, 133);
-            tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 1;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new Size(306, 94);
-            tableLayoutPanel1.TabIndex = 2;
+            tableLayoutWhereTablesDisplay.AutoScroll = true;
+            tableLayoutWhereTablesDisplay.ColumnCount = 2;
+            tableLayoutWhereTablesDisplay.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 74.7346039F));
+            tableLayoutWhereTablesDisplay.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25.2653961F));
+            tableLayoutWhereTablesDisplay.Location = new Point(172, 133);
+            tableLayoutWhereTablesDisplay.Name = "tableLayoutWhereTablesDisplay";
+            tableLayoutWhereTablesDisplay.RowCount = 1;
+            tableLayoutWhereTablesDisplay.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
+            tableLayoutWhereTablesDisplay.Size = new Size(405, 182);
+            tableLayoutWhereTablesDisplay.TabIndex = 2;
+            // 
+            // SaveDb
+            // 
+            SaveDb.Location = new Point(250, 321);
+            SaveDb.Name = "SaveDb";
+            SaveDb.Size = new Size(146, 23);
+            SaveDb.TabIndex = 3;
+            SaveDb.Text = "Зберігти датабазу";
+            SaveDb.UseVisualStyleBackColor = true;
+            
+            // 
+            // CloseDb
+            // 
+            CloseDb.Location = new Point(250, 350);
+            CloseDb.Name = "CloseDb";
+            CloseDb.Size = new Size(146, 23);
+            CloseDb.TabIndex = 4;
+            CloseDb.Text = "Закрити дб";
+            CloseDb.UseVisualStyleBackColor = true;
+            CloseDb.Click += CloseDb_Click;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
-            ClientSize = new Size(800, 450);
-            Controls.Add(tableLayoutPanel1);
+            ClientSize = new Size(679, 450);
+            Controls.Add(CloseDb);
+            Controls.Add(SaveDb);
+            Controls.Add(tableLayoutWhereTablesDisplay);
             Controls.Add(addTableToDb);
             Controls.Add(dbInfo);
             Name = "MainForm";
@@ -85,6 +110,8 @@
 
         private TextBox dbInfo;
         private Button addTableToDb;
-        private TableLayoutPanel tableLayoutPanel1;
+        private TableLayoutPanel tableLayoutWhereTablesDisplay;
+        private Button SaveDb;
+        private Button CloseDb;
     }
 }

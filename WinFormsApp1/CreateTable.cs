@@ -1,9 +1,14 @@
-﻿namespace WinFormsApp1;
+﻿using DB;
+
+namespace WinFormsApp1;
 
 public partial class CreateTable : Form
 {
-    public CreateTable()
+    private Db _db;
+    public event EventHandler TableCreated;
+    public CreateTable(Db db)
     {
+        _db = db;
         InitializeComponent();
     }
     private TextBox _tableNameTextBox;
@@ -13,7 +18,6 @@ public partial class CreateTable : Form
 
     private void AddColumnButton_Click(object sender, EventArgs e)
     {
-
         var comboBoxReplica = new ComboBox();
 
         // comboBox1
@@ -24,6 +28,7 @@ public partial class CreateTable : Form
         comboBoxReplica.Name = "comboBox1";
         comboBoxReplica.Size = new Size(121, 23);
         comboBoxReplica.TabIndex = 6;
+        comboBoxReplica.SelectedIndex = 0;
         // 
         // label2
         // 
@@ -44,6 +49,7 @@ public partial class CreateTable : Form
         button1Replica.TabIndex = 6;
         button1Replica.Text = "Видалити";
         button1Replica.UseVisualStyleBackColor = true;
+        
         // 
         // textBox1
         // 
@@ -85,14 +91,49 @@ public partial class CreateTable : Form
         tableLayoutPanel1.RowCount++;
         tableLayoutPanel1.Controls.Add(tableLayoutRowReplica, 0, tableLayoutPanel2.RowCount - 1);
         Console.Write(tableLayoutPanel1.RowCount);
+        button1Replica.Click += (o, args) =>
+        {
+            tableLayoutPanel1.Controls.Remove(tableLayoutRowReplica);
+        };
     }
 
     private void CreateTableButton_Click(object sender, EventArgs e)
     {
-
+        var tableName = _tableNameTextBox.Text;
+        
+        var controlsFromTableLayoutPanel = tableLayoutPanel1.Controls;
+        var columns = new List<Column>();
+        foreach (var controlObject in controlsFromTableLayoutPanel)
+        {
+            var control = (TableLayoutPanel) controlObject;
+            var comboBox = (ComboBox) control.Controls[0];
+            var textBox = (TextBox) control.Controls[3];
+            var columnName = textBox.Text;
+            var columnType = comboBox.Text;
+            var column = new Column
+            {
+                Name = columnName,
+                Type = columnType switch
+                {
+                    "Integer" => ColumnType.Integer,
+                    "Real" => ColumnType.Real,
+                    "Char" => ColumnType.Char,
+                    "String" => ColumnType.String,
+                    "DateTime" => ColumnType.DateTime,
+                    "DateInterval" => ColumnType.DateInterval,
+                    _ => throw new ArgumentOutOfRangeException()
+                }
+            };
+            columns.Add(column);
+        }
+        Console.Write(columns.Count);
+        var table = Table.Create(tableName, columns);
+        _db.AddTable(tableName, table);
+        Close();
+        OnTableCreated(EventArgs.Empty);
     }
-
-
-
-
+    protected virtual void OnTableCreated(EventArgs e)
+    {
+        TableCreated?.Invoke(this, e);
+    }
 }

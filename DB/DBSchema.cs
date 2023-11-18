@@ -31,9 +31,12 @@ public class DbSchema
             var tableName = reader.ReadString();
             schema.Tables[tableName] = Table.ReadBinary(reader);
         }
-
+    
         return schema;
     }
+    
+    
+
 }
 
 public class Table
@@ -72,7 +75,7 @@ public class Table
             var cell = row[x.Name];
             if (cell == null)
             {
-                throw new Exception($"Column ${x.Name} is missing");
+                throw new Exception($"Column {x.Name} is missing");
             }
             return cell;
         }).ToList();
@@ -142,7 +145,7 @@ public class Table
         }
         
         var rowsCount = reader.ReadInt32();
-        for (var i = 0; i < columnCount; i++)
+        for (var i = 0; i < rowsCount; i++)
         {
             int id = -1;
             var row = new List<object>();

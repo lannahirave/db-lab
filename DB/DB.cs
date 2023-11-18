@@ -28,6 +28,11 @@ public class Db
         }).ToList();
         Schema.Tables[name] = Table.Create(name, tableColumns);
     }
+    public void AddTable(string name, Table table)
+    {
+        
+        Schema.Tables[name] = table;
+    }
 
     public void RemoveTable(string name)
     {
@@ -59,6 +64,7 @@ public class Db
         
         stream.WriteTo(file);
         await file.FlushAsync();
+        await file.DisposeAsync();
     }
 
     public static async Task<Db> LoadAsync(IFileSystem fileSystem, string path)
@@ -66,8 +72,9 @@ public class Db
         var file = EnsureExists(fileSystem, path);
 
         var reader = new BinaryReader(file);
-
-        return new Db(path, DbSchema.ReadBinary(reader));
+        var schema = DbSchema.ReadBinary(reader);
+        reader.Dispose();
+        return new Db(path, schema);
     }
 
     private static FileSystemStream EnsureExists(IFileSystem fileSystem, string path)
