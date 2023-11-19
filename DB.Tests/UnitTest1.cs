@@ -7,35 +7,70 @@ public class Tests
     {
     }
 
+    
+    
     [Test]
-    public async Task Test1()
+    public async Task TestRemoveTable()
+    {
+        var fileSystem = new System.IO.Abstractions.TestingHelpers.MockFileSystem();
+        var db = await Db.CreateAsync(fileSystem, "/hello.db", "hello");
+
+        db.AddTable("testTable", new []
+        {
+            ("id", ColumnType.Integer),
+            ("name", ColumnType.String),
+        });
+
+        db.RemoveTable("testTable");
+
+        Assert.IsFalse(db.Schema.Tables.ContainsKey("testTable"));
+    }
+    [Test]
+    public async Task TestAddTable()
+    {
+        var fileSystem = new System.IO.Abstractions.TestingHelpers.MockFileSystem();
+        var db = await Db.CreateAsync(fileSystem, "/hello.db", "hello");
+
+        db.AddTable("testTable", new []
+        {
+            ("id", ColumnType.Integer),
+            ("name", ColumnType.String),
+        });
+
+        Assert.IsTrue(db.Schema.Tables.ContainsKey("testTable"));
+    }
+    [Test]
+    public async Task TestSaveAndLoad()
     {
         var fileSystem = new System.IO.Abstractions.TestingHelpers.MockFileSystem();
         var db = await Db.CreateAsync(fileSystem, "/hello.db", "hello");
         db.AddTable("users", new []
         {
             ("int", ColumnType.Integer),
-            ("name", ColumnType.String)
+            ("name", ColumnType.String),
+            ("date", ColumnType.DateTime),
         });
 
         var usersTable = db.Schema.Tables["users"];
         usersTable.AddRow(new Dictionary<string, object?>()
         {
             {"int", 1},
-            {"name", "John Doe"}
+            {"name", "John Doe"},
+            {"date", new DateTime(2023, 5, 10)}
         });
         usersTable.AddRow(new Dictionary<string, object?>()
         {
             {"int", 3},
-            {"name", "Valeraaaaaaaaaaaaaa Doe"}
+            {"name", "Valeraaaaaaaaaaaaaa Doe"},
+            {"date", new DateTime(2023, 11, 10)}
         });
-        usersTable.DuplicateRow(1);
         usersTable.RemoveRow(1);
-        usersTable.DuplicateRow(2);
         usersTable.UpdateRow(2, new Dictionary<string, object?>()
         {
             {"int", 4},
-            {"name", "Joe Joe"}
+            {"name", "Joe Joe"},
+            
+            {"date", new DateTime(2023, 2, 10)}
         });
         
         
@@ -43,6 +78,8 @@ public class Tests
         
         var db2 = await Db.LoadAsync(fileSystem, "/hello.db");
         
-        Assert.Pass();
+        Assert.That(db2.Schema.Name, Is.EqualTo(db.Schema.Name));
     }
+    
+    
 }

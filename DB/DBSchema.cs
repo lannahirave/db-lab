@@ -103,12 +103,6 @@ public class Table
     public void RemoveRow(int id) {
         _rows.Remove(id);
     }
-
-    public void DuplicateRow(int id) {
-        var newId = _idCounter++;
-        _rows[newId] = _rows[id].ToList();
-        _rows[newId][0] = newId;
-    }
     
     public void WriteBinary(BinaryWriter writer)
     {
