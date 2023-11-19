@@ -27,6 +27,12 @@ public static class ColumnUtils
             case ColumnType.String:
                 writer.Write((string)value);
                 break;
+            case ColumnType.DateTime:
+                writer.Write(((DateTime)value).ToBinary());
+                break;
+            case ColumnType.DateInterval:
+                ((DateInterval)value).WriteBinary(writer);
+                break;
         }
     }
 
@@ -38,11 +44,14 @@ public static class ColumnUtils
             ColumnType.Real => reader.ReadDouble(),
             ColumnType.Char => reader.ReadChar(),
             ColumnType.String => reader.ReadString(),
-            ColumnType.DateTime => throw new NotImplementedException(),
-            ColumnType.DateInterval => throw new NotImplementedException(),
+            ColumnType.DateTime => DateTime.FromBinary(reader.ReadInt64()),
+            ColumnType.DateInterval => DateInterval.ReadBinary(reader),
             _ => throw new ArgumentOutOfRangeException()
         };
     }
+    
+    
+    
 }
 
 public class Column

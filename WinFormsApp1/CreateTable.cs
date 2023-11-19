@@ -89,7 +89,7 @@ public partial class CreateTable : Form
         tableLayoutRowReplica.Size = new Size(385, 48);
         tableLayoutRowReplica.TabIndex = 5;
         tableLayoutPanel1.RowCount++;
-        tableLayoutPanel1.Controls.Add(tableLayoutRowReplica, 0, tableLayoutPanel2.RowCount - 1);
+        tableLayoutPanel1.Controls.Add(tableLayoutRowReplica, 0, tableLayoutPanel1.RowCount - 1);
         Console.Write(tableLayoutPanel1.RowCount);
         button1Replica.Click += (o, args) =>
         {

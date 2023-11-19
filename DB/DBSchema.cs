@@ -43,7 +43,7 @@ public class Table
 {
     private string _name;
     private List<Column> _columns;
-    private int _idCounter = 0;
+    private int _idCounter;
     private IDictionary<int, List<object>> _rows;
 
     public IReadOnlyCollection<Column> Columns => _columns;
@@ -62,7 +62,7 @@ public class Table
         return new Table(name, defaultColumns.Concat(columns).ToList());
     }
 
-    public void AddRow(IDictionary<string, object?> row)
+    public int AddRow(IDictionary<string, object?> row)
     {
         var id = _idCounter++;
         _rows[id] = _columns.Select(x =>
@@ -79,6 +79,7 @@ public class Table
             }
             return cell;
         }).ToList();
+        return id;
     }
 
     public void UpdateRow(int id, IDictionary<string, object?> row)
