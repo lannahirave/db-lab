@@ -68,6 +68,7 @@ public class Table
 
             var cell = row[x.Name];
             if (cell == null) throw new Exception($"Column {x.Name} is missing");
+            if (cell.GetType() != x.Type.GetColumnType()) throw new Exception($"Column {x.Name} has wrong type");
             return cell;
         }).ToList();
         return id;

@@ -1,0 +1,166 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+option csharp_namespace = "DB.gRPC.Generated";
+
+package db;
+
+service DB {
+  rpc GetTables (google.protobuf.Empty) returns (GetTablesResponse) {
+    option (google.api.http) = {
+      get: "/v1/tables",
+      response_body: "tables",
+    };
+  };
+  rpc CreateTable (CreateTableRequest) returns (OperationResponse) {
+    option (google.api.http) = {
+      post: "/v1/{tableName}",
+      body: "*",
+    };
+  };
+  rpc DeleteTable (DeleteTableRequest) returns (OperationResponse) {
+    option (google.api.http) = {
+      delete: "/v1/{tableName}",
+    };
+  };
+  rpc AddRow (AddRowRequest) returns (RowOperationResponse) {
+    option (google.api.http) = {
+      post: "/v1/{tableName}/row",
+      body: "*",
+    };
+  };
+  rpc DeleteRow (DeleteRowRequest) returns (OperationResponse) {
+    option (google.api.http) = {
+      delete: "/v1/{tableName}/row/{id}",
+    };
+  };
+  rpc UpdateRow (UpdateRowRequest) returns (OperationResponse) {
+    option (google.api.http) = {
+      put: "/v1/{tableName}/row/{id}",
+      body: "*",
+    };
+  };
+  rpc GetRows (GetRowsRequest) returns (GetRowsResponse) {
+    option (google.api.http) = {
+      get: "/v1/{tableName}/rows",
+      response_body: "rows",
+    };
+  };
+  rpc GetColumns (GetColumnsRequest) returns (GetColumnsResponse) {
+    option (google.api.http) = {
+      get: "/v1/{tableName}/columns",
+      response_body: "columns",
+    };
+  };
+}
+
+message OperationResponse {
+  bool success = 1;
+  optional string message = 2;
+}
+
+message RowOperationResponse {
+  bool success = 1;
+  optional string message = 2;
+  optional int32 id = 3;
+}
+
+message GetTablesResponse {
+  repeated string tables = 1;
+}
+
+message GetRowsResponse {
+  repeated RowData rows = 1;
+}
+
+message GetColumnsResponse {
+  repeated Column columns = 1;
+}
+
+message CreateTableRequest {
+  string tableName = 1;
+  repeated Column columns = 2;
+}
+
+message GetRowsRequest {
+  string tableName = 1;
+  int32 limit = 3;
+  int32 offset = 4;
+}
+
+message GetColumnsRequest {
+  string tableName = 1;
+}
+
+message DeleteTableRequest {
+  string tableName = 1;
+}
+
+message AddRowRequest {
+  string tableName = 1;
+  repeated Cell row = 2;
+}
+
+message DeleteRowRequest {
+  string tableName = 1;
+  int32 id = 2;
+}
+
+message UpdateRowRequest {
+  string tableName = 1;
+  int32 id = 2;
+  repeated Cell row = 3;
+}
+
+message Column {
+  string name = 1;
+  ColumnType type = 2;
+}
+
+message Cell {
+  string name = 1;
+  oneof value {
+    int32 intValue = 2;
+    float floatValue = 3;
+    int32 charValue = 4;
+    string stringValue = 5;
+    google.protobuf.Timestamp dateTimeValue = 6;
+    DateTimeInterval dateTimeIntervalValue = 7;
+  };
+}
+
+message Row {
+  repeated Cell cells = 1;
+}
+
+message RowData {
+  repeated CellData data = 1;
+}
+
+message CellData {
+  oneof value {
+    int32 intValue = 2;
+    float floatValue = 3;
+    int32 charValue = 4;
+    string stringValue = 5;
+    google.protobuf.Timestamp dateTimeValue = 6;
+    DateTimeInterval dateTimeIntervalValue = 7;
+  };
+}
+
+message DateTimeInterval {
+  google.protobuf.Timestamp start = 1;
+  google.protobuf.Timestamp end = 2;
+}
+
+enum ColumnType {
+  INTEGER = 0;
+  REAL = 1;
+  CHAR = 2;
+  STRING = 3;
+  DATE_TIME = 4;
+  DATE_TIME_INTERVAL = 5;
+}

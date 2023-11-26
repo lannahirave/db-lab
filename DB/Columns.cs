@@ -36,6 +36,20 @@ public static class ColumnUtils
                 break;
         }
     }
+    
+    public static Type GetColumnType(this ColumnType columnType)
+    {
+        return columnType switch
+        {
+            ColumnType.Integer => typeof(int),
+            ColumnType.Real => typeof(double),
+            ColumnType.Char => typeof(char),
+            ColumnType.String => typeof(string),
+            ColumnType.DateTime => typeof(DateTime),
+            ColumnType.DateInterval => typeof(DateInterval),
+            _ => throw new ArgumentOutOfRangeException()
+        };
+    }
 
     public static object ReadColumnData(this BinaryReader reader, Column column)
     {
