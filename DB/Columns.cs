@@ -1,6 +1,7 @@
 namespace DB;
 
-public enum ColumnType {
+public enum ColumnType
+{
     Integer,
     Real,
     Char,
@@ -49,9 +50,6 @@ public static class ColumnUtils
             _ => throw new ArgumentOutOfRangeException()
         };
     }
-    
-    
-    
 }
 
 public class Column
@@ -64,7 +62,7 @@ public class Column
         writer.Write(Name);
         writer.Write((int)Type);
     }
-    
+
     public static Column ReadBinary(BinaryReader reader)
     {
         return new Column

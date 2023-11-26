@@ -4,16 +4,18 @@ namespace WinFormsApp1;
 
 public partial class CreateTable : Form
 {
-    private Db _db;
-    public event EventHandler TableCreated;
+    private Button _addColumnButton;
+    private Button _createTableButton;
+    private readonly Db _db;
+    private TextBox _tableNameTextBox;
+
     public CreateTable(Db db)
     {
         _db = db;
         InitializeComponent();
     }
-    private TextBox _tableNameTextBox;
-    private Button _addColumnButton;
-    private Button _createTableButton;
+
+    public event EventHandler TableCreated;
 
 
     private void AddColumnButton_Click(object sender, EventArgs e)
@@ -23,7 +25,8 @@ public partial class CreateTable : Form
         // comboBox1
         // 
         comboBoxReplica.FormattingEnabled = true;
-        comboBoxReplica.Items.AddRange(new object[] { "Integer", "Real", "Char", "String", "DateTime", "DateInterval" });
+        comboBoxReplica.Items.AddRange(new object[]
+            { "Integer", "Real", "Char", "String", "DateTime", "DateInterval" });
         comboBoxReplica.Location = new Point(3, 23);
         comboBoxReplica.Name = "comboBox1";
         comboBoxReplica.Size = new Size(121, 23);
@@ -49,7 +52,7 @@ public partial class CreateTable : Form
         button1Replica.TabIndex = 6;
         button1Replica.Text = "Видалити";
         button1Replica.UseVisualStyleBackColor = true;
-        
+
         // 
         // textBox1
         // 
@@ -91,23 +94,20 @@ public partial class CreateTable : Form
         tableLayoutPanel1.RowCount++;
         tableLayoutPanel1.Controls.Add(tableLayoutRowReplica, 0, tableLayoutPanel1.RowCount - 1);
         Console.Write(tableLayoutPanel1.RowCount);
-        button1Replica.Click += (o, args) =>
-        {
-            tableLayoutPanel1.Controls.Remove(tableLayoutRowReplica);
-        };
+        button1Replica.Click += (o, args) => { tableLayoutPanel1.Controls.Remove(tableLayoutRowReplica); };
     }
 
     private void CreateTableButton_Click(object sender, EventArgs e)
     {
         var tableName = _tableNameTextBox.Text;
-        
+
         var controlsFromTableLayoutPanel = tableLayoutPanel1.Controls;
         var columns = new List<Column>();
         foreach (var controlObject in controlsFromTableLayoutPanel)
         {
-            var control = (TableLayoutPanel) controlObject;
-            var comboBox = (ComboBox) control.Controls[0];
-            var textBox = (TextBox) control.Controls[3];
+            var control = (TableLayoutPanel)controlObject;
+            var comboBox = (ComboBox)control.Controls[0];
+            var textBox = (TextBox)control.Controls[3];
             var columnName = textBox.Text;
             var columnType = comboBox.Text;
             var column = new Column
@@ -126,12 +126,14 @@ public partial class CreateTable : Form
             };
             columns.Add(column);
         }
+
         Console.Write(columns.Count);
         var table = Table.Create(tableName, columns);
         _db.AddTable(tableName, table);
         Close();
         OnTableCreated(EventArgs.Empty);
     }
+
     protected virtual void OnTableCreated(EventArgs e)
     {
         TableCreated?.Invoke(this, e);

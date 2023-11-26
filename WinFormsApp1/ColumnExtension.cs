@@ -49,12 +49,14 @@ public static class ColumnExtension
             case ColumnType.DateTime:
             {
                 string[] formats = { "dd.MM.yyyy" };
-                var parseResult = DateTime.TryParseExact(stringValue, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out var value);
+                var parseResult = DateTime.TryParseExact(stringValue, formats, CultureInfo.InvariantCulture,
+                    DateTimeStyles.None, out var value);
                 if (!parseResult)
                 {
                     result = null;
                     return false;
                 }
+
                 result = value;
                 return true;
             }
@@ -65,22 +67,26 @@ public static class ColumnExtension
                     result = null;
                     return false;
                 }
+
                 var stringsplit = stringValue.Split(';');
                 string[] formats = { "dd.MM.yyyy" };
-                
-                var parseResult1 = DateTime.TryParseExact(stringsplit[0], formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out var value1);
-                var parseResult2 = DateTime.TryParseExact(stringsplit[1], formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out var value2);
+
+                var parseResult1 = DateTime.TryParseExact(stringsplit[0], formats, CultureInfo.InvariantCulture,
+                    DateTimeStyles.None, out var value1);
+                var parseResult2 = DateTime.TryParseExact(stringsplit[1], formats, CultureInfo.InvariantCulture,
+                    DateTimeStyles.None, out var value2);
 
                 if (!parseResult1 || !parseResult2)
                 {
                     result = null;
                     return false;
                 }
+
                 result = new DateInterval(value1, value2);
                 return parseResult1 && parseResult2;
             }
 
-        default:
+            default:
                 result = null;
                 return false;
         }

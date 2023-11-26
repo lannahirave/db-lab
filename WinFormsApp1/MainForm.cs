@@ -4,15 +4,13 @@ namespace WinFormsApp1;
 
 public partial class MainForm : Form
 {
-    private Db _db;
+    private readonly Db _db;
+
     public MainForm(Db db)
     {
         InitializeComponent();
         _db = db;
-        SaveDb.Click += async (sender, e) =>
-        {
-            await SaveDb_Click();
-        };
+        SaveDb.Click += async (sender, e) => { await SaveDb_Click(); };
     }
 
     private async void CreateTable(object sender, EventArgs e)
@@ -20,8 +18,8 @@ public partial class MainForm : Form
         var form = new CreateTable(_db);
         form.TableCreated += CreateTableForm_TableCreated;
         form.Show();
-
     }
+
     private void CreateTableForm_TableCreated(object sender, EventArgs e)
     {
         // This method will be called when the table is created
@@ -51,10 +49,11 @@ public partial class MainForm : Form
             deleteButton.Click += (sender, e) => DeleteTable(table.Key);
             tableLayoutWhereTablesDisplay.Controls.Add(deleteButton);
         }
+
         var tableLayout = new TableLayoutPanel();
         tableLayout.ColumnCount = 2;
     }
-        
+
     private void OpenTable(string name)
     {
         var table = _db.Schema.Tables[name];

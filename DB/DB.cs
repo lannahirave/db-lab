@@ -4,20 +4,21 @@ namespace DB;
 
 public class DbLoadError : Exception
 {
-    public DbLoadError(string message) : base(message) { }
+    public DbLoadError(string message) : base(message)
+    {
+    }
 }
 
 public class Db
 {
-    public string Path { get; }
-    public DbSchema Schema { get; }
-
-
     private Db(string path, DbSchema schema)
     {
         Path = path;
         Schema = schema;
     }
+
+    public string Path { get; }
+    public DbSchema Schema { get; }
 
     public void AddTable(string name, IEnumerable<(string name, ColumnType type)> columns)
     {
@@ -28,9 +29,9 @@ public class Db
         }).ToList();
         Schema.Tables[name] = Table.Create(name, tableColumns);
     }
+
     public void AddTable(string name, Table table)
     {
-        
         Schema.Tables[name] = table;
     }
 
@@ -38,7 +39,7 @@ public class Db
     {
         Schema.Tables.Remove(name);
     }
-    
+
     public static async Task<Db> CreateAsync(IFileSystem fileSystem, string path, string name)
     {
         var schema = new DbSchema
@@ -47,9 +48,9 @@ public class Db
             Tables = new Dictionary<string, Table>()
         };
         var db = new Db(path, schema);
-        
+
         await db.SaveAsync(fileSystem);
-        
+
         return db;
     }
 
@@ -59,9 +60,9 @@ public class Db
 
         using var stream = new MemoryStream();
         var writer = new BinaryWriter(stream);
-        
+
         Schema.WriteBinary(writer);
-        
+
         stream.WriteTo(file);
         await file.FlushAsync();
         await file.DisposeAsync();
@@ -81,11 +82,8 @@ public class Db
     {
         var directory = System.IO.Path.GetDirectoryName(path);
 
-        if (directory is null)
-        {
-            throw new Exception("Invalid path");
-        }
-        
+        if (directory is null) throw new Exception("Invalid path");
+
         if (!fileSystem.File.Exists(path))
         {
             fileSystem.Directory.CreateDirectory(directory);

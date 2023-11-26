@@ -4,40 +4,32 @@ namespace WinFormsApp1;
 
 public partial class TableForm : Form
 {
-    private Table _table;
-    private bool _isRowBeingEdited;
     private bool _isRowBeingAdded;
+    private bool _isRowBeingEdited;
+    private readonly Table _table;
+
     public TableForm(Table table)
     {
         InitializeComponent();
         _table = table;
 
-        foreach (var column in _table.Columns)
-        {
-            dataGridView1.Columns.Add(column.Name, column.Name);
-        }
+        foreach (var column in _table.Columns) dataGridView1.Columns.Add(column.Name, column.Name);
 
         var idColumn = dataGridView1.Columns["$id"];
-        if (idColumn != null)
-        {
-            idColumn.ReadOnly = true;
-        }
+        if (idColumn != null) idColumn.ReadOnly = true;
 
         foreach (var row in _table.Rows)
         {
             var rowArray = new object[_table.Columns.Count];
-            for(int i = 0; i < row.Count; i++)
+            for (var i = 0; i < row.Count; i++)
             {
                 var item = row.ElementAt(i);
                 if (item is DateTime time)
-                {
                     rowArray[i] = time.ToString("dd.MM.yyyy");
-                }
                 else
-                {
                     rowArray[i] = item;
-                }
             }
+
             dataGridView1.Rows.Add(rowArray);
         }
 
@@ -57,10 +49,7 @@ public partial class TableForm : Form
 
     private void DataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
     {
-        if (!_isRowBeingEdited)
-        {
-            return;
-        }
+        if (!_isRowBeingEdited) return;
 
         if (_isRowBeingAdded)
         {
@@ -70,11 +59,10 @@ public partial class TableForm : Form
 
         if (e.RowIndex == dataGridView1.NewRowIndex - 1)
         {
-
             DataGridView1_RowsAdded(e);
             return;
         }
-        
+
         // if id is null, then it's a new row
         if (string.IsNullOrEmpty(dataGridView1.Rows[e.RowIndex].Cells[0].Value as string))
         {
@@ -86,7 +74,7 @@ public partial class TableForm : Form
         var columnIndex = e.ColumnIndex;
 
         var modifiedValue = dataGridView1.Rows[rowIndex].Cells[columnIndex].Value;
-        
+
         // check if value can be cast to type of column
         var column = _table.Columns.Skip(columnIndex).First();
         if (!column.TryCast(modifiedValue, out var parsedValue))
@@ -100,7 +88,7 @@ public partial class TableForm : Form
             });
             return;
         }
-        
+
         var rowData = _table.Rows.ElementAt(rowIndex);
         var columnName = column.Name;
         var newCellDictionary = new Dictionary<string, object?>();
@@ -126,7 +114,7 @@ public partial class TableForm : Form
     {
         _isRowBeingAdded = true;
         var newRow = new Dictionary<string, object?>();
-        for (int i = 1; i < _table.Columns.Count; ++i)
+        for (var i = 1; i < _table.Columns.Count; ++i)
         {
             var column = _table.Columns.ElementAt(i);
             var modifiedValue = dataGridView1.Rows[e.RowIndex].Cells[i].Value;
@@ -142,15 +130,15 @@ public partial class TableForm : Form
                 _isRowBeingAdded = false;
                 return;
             }
+
             var columnName = column.Name;
             newRow[columnName] = parsedValue;
         }
 
         try
         {
-            int id = _table.AddRow(newRow);
+            var id = _table.AddRow(newRow);
             dataGridView1.Rows[e.RowIndex].Cells[0].Value = id;
-
         }
         catch (Exception exp)
         {
@@ -167,7 +155,7 @@ public partial class TableForm : Form
             _isRowBeingAdded = false;
         }
     }
-    
+
     private void DataGridView1_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
     {
         _isRowBeingEdited = true;
