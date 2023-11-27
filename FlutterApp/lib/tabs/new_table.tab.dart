@@ -69,7 +69,7 @@ class AddTableTab extends HookConsumerWidget {
                                 validator: FormBuilderValidators.compose([
                                   FormBuilderValidators.required(),
                                 ]),
-                                items: ColumnType.values
+                                items: db.asData!.value.columnTypes
                                     .map((e) => DropdownMenuItem(
                                         value: e,
                                         child:

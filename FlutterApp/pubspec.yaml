@@ -47,6 +47,8 @@ dependencies:
   davi: ^3.4.1
   form_builder_file_picker: ^4.1.0
   file: ^7.0.0
+  grpc: ^3.2.4
+  protobuf: ^3.1.0
 
 dev_dependencies:
   flutter_test:

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:file/file.dart';
+import 'package:path/path.dart';
 import 'package:unidb/db/base_db.dart';
 import 'package:unidb/db/local_db/db.dart';
 
@@ -79,4 +80,17 @@ class LocalDBAdapter implements BaseDB {
     db.schema.tables[tableName]!.updateRow(id, row);
     return db.save(fileSystem: fileSystem);
   }
+  
+  @override
+  List<ColumnType> get supportedTypes => [
+    ColumnType.integer,
+    ColumnType.string,
+    ColumnType.real,
+    ColumnType.char,
+    ColumnType.intRange,
+    ColumnType.txtFile,
+  ];
+
+  @override
+  String get dbName => basename(db.path);
 }

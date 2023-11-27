@@ -22,6 +22,8 @@ abstract class BaseDB {
   FutureOr<void> deleteRow({required String tableName, required int id});
   FutureOr<List<List<Object>>> getRows({required String tableName});
   FutureOr<List<DbColumn>> getColumns({required String tableName});
+  List<ColumnType> get supportedTypes;
+  String get dbName;
 }
 
 class IntegerRange {

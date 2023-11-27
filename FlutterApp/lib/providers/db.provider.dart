@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:unidb/db/base_db.dart';
+import 'package:unidb/db/grpc/adapter.dart';
 import 'package:unidb/db/local_db/adapter.dart';
 import 'package:window_size/window_size.dart';
 
@@ -57,6 +58,12 @@ class DbLoaderNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> connectGRPCDb({required String host, required int port}) async {
+    db = await GRPCDBAdapter.conect(host: host, port: port);
+    setWindowTitle("DBMS - GRPC");
+    notifyListeners();
+  }
+
   void closeDb() {
     db = null;
     setWindowTitle("DBMS");
@@ -67,8 +74,15 @@ class DbLoaderNotifier extends ChangeNotifier {
 class DbNotifierState {
   final BaseDB db;
   final List<String> tables;
+  final List<ColumnType> columnTypes;
+  final String dbName;
 
-  DbNotifierState(this.db, this.tables);
+  DbNotifierState({
+    required this.db,
+    required this.tables,
+    required this.columnTypes,
+    required this.dbName,
+  });
 }
 
 class DbNotifier extends AsyncNotifier<DbNotifierState> {
@@ -84,7 +98,12 @@ class DbNotifier extends AsyncNotifier<DbNotifierState> {
 
   FutureOr<DbNotifierState> _fetchState() async {
     final tables = await _db.getTables();
-    return DbNotifierState(_db, tables);
+    return DbNotifierState(
+      db: _db,
+      tables: tables,
+      columnTypes: _db.supportedTypes,
+      dbName: _db.dbName,
+    );
   }
 
   @override

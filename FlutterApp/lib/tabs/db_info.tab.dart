@@ -26,7 +26,7 @@ class DbInfoTab extends HookConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Database: local'),
+                Text('Database: ${db.dbName}'),
                 const SizedBox(height: 4),
                 const Divider(),
                 const SizedBox(height: 4),

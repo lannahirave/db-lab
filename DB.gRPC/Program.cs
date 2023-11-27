@@ -1,9 +1,19 @@
 using System.IO.Abstractions;
 using DB;
 using DB.gRPC.Services;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost.ConfigureKestrel(options => {
+    options.ListenAnyIP(5001, listenOptions => {
+        listenOptions.Protocols = HttpProtocols.Http1;
+    });
+    options.ListenAnyIP(5002, listenOptions => {
+        listenOptions.Protocols = HttpProtocols.Http2;
+    });
+});
 
 // Additional configuration is required to successfully run gRPC on macOS.
 // For instructions on how to configure Kestrel and gRPC clients on macOS, visit https://go.microsoft.com/fwlink/?linkid=2099682
