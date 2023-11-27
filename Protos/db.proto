@@ -17,7 +17,7 @@ service DB {
   };
   rpc CreateTable (CreateTableRequest) returns (OperationResponse) {
     option (google.api.http) = {
-      post: "/v1/{tableName}",
+      post: "/v1",
       body: "*",
     };
   };

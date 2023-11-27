@@ -34,7 +34,7 @@ builder.Services.AddGrpcSwagger();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1",
-    new OpenApiInfo { Title = "gRPC transcoding", Version = "v1" });
+    new OpenApiInfo { Title = "DB API", Version = "v1" });
 });
 
 var app = builder.Build();
