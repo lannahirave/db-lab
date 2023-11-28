@@ -1,4 +1,4 @@
-﻿namespace WinFormsApp1
+﻿namespace DB.WinFormsClient
 {
     partial class TableForm
     {
@@ -30,11 +30,9 @@
         {
             components = new System.ComponentModel.Container();
             dataGridView1 = new DataGridView();
-            tableBindingSource1 = new BindingSource(components);
-            tableBindingSource = new BindingSource(components);
+        
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)tableBindingSource1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)tableBindingSource).BeginInit();
+            
             SuspendLayout();
             // 
             // dataGridView1
@@ -45,14 +43,7 @@
             dataGridView1.RowTemplate.Height = 25;
             dataGridView1.Size = new Size(779, 422);
             dataGridView1.TabIndex = 0;
-            // 
-            // tableBindingSource1
-            // 
-            tableBindingSource1.DataSource = typeof(DB.Table);
-            // 
-            // tableBindingSource
-            // 
-            tableBindingSource.DataSource = typeof(DB.Table);
+          
             // 
             // TableForm
             // 
@@ -63,15 +54,11 @@
             Name = "TableForm";
             Text = "TableForm";
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)tableBindingSource1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)tableBindingSource).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
 
         private DataGridView dataGridView1;
-        private BindingSource tableBindingSource1;
-        private BindingSource tableBindingSource;
     }
 }
