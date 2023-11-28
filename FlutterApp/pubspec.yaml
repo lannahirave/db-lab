@@ -49,6 +49,9 @@ dependencies:
   file: ^7.0.0
   grpc: ^3.2.4
   protobuf: ^3.1.0
+  xml: ^6.3.0
+  uuid: ^4.2.1
+  http: ^1.1.0
 
 dev_dependencies:
   flutter_test:

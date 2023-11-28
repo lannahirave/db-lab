@@ -7,6 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:unidb/db/base_db.dart';
 import 'package:unidb/db/grpc/adapter.dart';
 import 'package:unidb/db/local_db/adapter.dart';
+import 'package:unidb/db/wsdl/adapter.dart';
 import 'package:window_size/window_size.dart';
 
 const fileSystem = LocalFileSystem();
@@ -61,6 +62,12 @@ class DbLoaderNotifier extends ChangeNotifier {
   Future<void> connectGRPCDb({required String host, required int port}) async {
     db = await GRPCDBAdapter.conect(host: host, port: port);
     setWindowTitle("DBMS - GRPC");
+    notifyListeners();
+  }
+
+  Future<void> connectWSDLDb({required String url}) async {
+    db = await WSDLDBAdapter.conect(url: url);
+    setWindowTitle("DBMS - WSDL");
     notifyListeners();
   }
 
@@ -138,7 +145,7 @@ class TableNotifierState {
 
 class TableNotifier
     extends AutoDisposeFamilyAsyncNotifier<TableNotifierState, String> {
-  late final BaseDB _db;
+  late BaseDB _db;
   late String _tableName;
 
   FutureOr<TableNotifierState> _fetchState(String tableName) async {
