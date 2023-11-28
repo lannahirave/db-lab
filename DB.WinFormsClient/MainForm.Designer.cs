@@ -1,4 +1,4 @@
-﻿namespace WinFormsApp1
+﻿namespace DB.WinFormsClient
 {
     partial class MainForm
     {
@@ -31,7 +31,6 @@
             dbInfo = new TextBox();
             addTableToDb = new Button();
             tableLayoutWhereTablesDisplay = new TableLayoutPanel();
-            SaveDb = new Button();
             CloseDb = new Button();
             SuspendLayout();
             // 
@@ -68,16 +67,6 @@
             tableLayoutWhereTablesDisplay.Size = new Size(405, 182);
             tableLayoutWhereTablesDisplay.TabIndex = 2;
             // 
-            // SaveDb
-            // 
-            SaveDb.Location = new Point(250, 321);
-            SaveDb.Name = "SaveDb";
-            SaveDb.Size = new Size(146, 23);
-            SaveDb.TabIndex = 3;
-            SaveDb.Text = "Зберігти датабазу";
-            SaveDb.UseVisualStyleBackColor = true;
-            
-            // 
             // CloseDb
             // 
             CloseDb.Location = new Point(250, 350);
@@ -95,7 +84,6 @@
             AutoScroll = true;
             ClientSize = new Size(679, 450);
             Controls.Add(CloseDb);
-            Controls.Add(SaveDb);
             Controls.Add(tableLayoutWhereTablesDisplay);
             Controls.Add(addTableToDb);
             Controls.Add(dbInfo);
@@ -111,7 +99,6 @@
         private TextBox dbInfo;
         private Button addTableToDb;
         private TableLayoutPanel tableLayoutWhereTablesDisplay;
-        private Button SaveDb;
         private Button CloseDb;
     }
 }

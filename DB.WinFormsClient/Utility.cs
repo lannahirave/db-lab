@@ -1,6 +1,6 @@
 ﻿using System.IO.Abstractions;
 
-namespace WinFormsApp1;
+namespace DB.WinFormsClient;
 
 internal static class Utility
 {
