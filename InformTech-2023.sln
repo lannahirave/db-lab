@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsApp1", "WinFormsApp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DB.gRPC", "DB.gRPC\DB.gRPC.csproj", "{90A981F0-4C29-48D0-AE35-81933E54B438}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DB.GraphQL", "DB.GraphQL\DB.GraphQL.csproj", "{81D472EB-4FE3-493D-B4CA-5215EC4D6793}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{90A981F0-4C29-48D0-AE35-81933E54B438}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90A981F0-4C29-48D0-AE35-81933E54B438}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90A981F0-4C29-48D0-AE35-81933E54B438}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81D472EB-4FE3-493D-B4CA-5215EC4D6793}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81D472EB-4FE3-493D-B4CA-5215EC4D6793}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81D472EB-4FE3-493D-B4CA-5215EC4D6793}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81D472EB-4FE3-493D-B4CA-5215EC4D6793}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
