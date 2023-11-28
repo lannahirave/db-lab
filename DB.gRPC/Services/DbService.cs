@@ -1,6 +1,5 @@
 using System.IO.Abstractions;
 using Grpc.Core;
-using DB.gRPC;
 using DB.gRPC.Generated;
 using Google.Protobuf.Collections;
 using Google.Protobuf.WellKnownTypes;
