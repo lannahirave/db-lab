@@ -1,6 +1,6 @@
-using DB;
+using DB.WinFormsClient.DBAdapter;
 
-namespace WinFormsApp1;
+namespace DB.WinFormsClient;
 
 public partial class Welcome : Form
 {
@@ -9,9 +9,6 @@ public partial class Welcome : Form
         InitializeComponent();
     }
 
-    private void Form1_Load(object sender, EventArgs e)
-    {
-    }
 
     private async void CreateDb_Click(object sender, EventArgs e)
     {
@@ -37,11 +34,7 @@ public partial class Welcome : Form
             try
             {
                 var db = await Db.CreateAsync(Utility.Filesystem, dbPath, dbName);
-                //MessageBox.Show("Database created successfully.");
-
-
-                var mainForm = new MainForm(db);
-                mainForm.Show();
+                OpenMainForm(db);
             }
             catch (Exception ex)
             {
@@ -55,7 +48,7 @@ public partial class Welcome : Form
         var openFileDialog = new OpenFileDialog
         {
             Filter = "Database files (*.db)|*.db",
-            Title = "Селект датабазу",
+            Title = "Select db file",
             InitialDirectory =
                 Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "MyDatabases")
         };
@@ -63,15 +56,29 @@ public partial class Welcome : Form
         if (openFileDialog.ShowDialog() == DialogResult.OK)
             try
             {
-                var dbName = Path.GetFileNameWithoutExtension(openFileDialog.FileName);
                 var db = await Db.LoadAsync(Utility.Filesystem, openFileDialog.FileName);
-                //MessageBox.Show("Датабаза завантажена.");
-                var mainForm = new MainForm(db);
-                mainForm.Show();
+                OpenMainForm(db);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
+    }
+
+    private void OpenMainForm(Db db)
+    {
+        IBaseDb dbAdapter = new LocalDb(db);
+        var mainForm = new MainForm(dbAdapter);
+        mainForm.Show();
+    }
+
+    private void Welcome_Load(object sender, EventArgs e)
+    {
+
+    }
+
+    private void textBox1_TextChanged(object sender, EventArgs e)
+    {
+
     }
 }

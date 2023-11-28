@@ -1,4 +1,4 @@
-﻿namespace WinFormsApp1
+﻿namespace DB.WinFormsClient
 {
     partial class CreateTable
     {
