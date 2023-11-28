@@ -1,3 +1,6 @@
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+
 namespace DB;
 
 public class DbSchema
@@ -52,6 +55,11 @@ public class Table
 
     public IReadOnlyCollection<Column> Columns => _columns;
     public ICollection<List<object>> Rows => _rows.Values;
+    
+    public ICollection<List<string>> GetSerializedRows()
+    {
+        return _rows.Values.Select(x => x.Select(cell => cell.ToString() ?? "null").ToList()).ToList();
+    }
 
     public static Table Create(string name, List<Column> columns)
     {
@@ -59,6 +67,111 @@ public class Table
         return new Table(name, defaultColumns.Concat(columns).ToList());
     }
 
+    public IDictionary<string, object?> CastRow(IEnumerable<(string Name, string Value)> row)
+    {
+        var rowDict = row.ToDictionary(x => x.Name, x => x.Value); 
+        return _columns
+            .Where(x => x.Name != "$id")
+            .Select(x => {
+                var cell = rowDict[x.Name];
+                
+                if (!TryCast(x.Type, cell, out var result))
+                    throw new Exception($"Column {x.Name} has wrong type");
+                return (Name: x.Name, Value: result);
+            })
+            .ToDictionary(x => x.Name, x => x.Value)!;
+    }
+    
+    public static bool TryCast(ColumnType type, object? modifiedValue, [NotNullWhen(true)] out object? result)
+    {
+        if (modifiedValue is not string stringValue)
+        {
+            result = null;
+            return false;
+        }
+
+        if (string.IsNullOrEmpty(stringValue))
+        {
+            result = null;
+            return false;
+        }
+
+        switch (type)
+        {
+            case ColumnType.Integer:
+            {
+                var parseResult = int.TryParse(stringValue, out var value);
+                result = value;
+                return parseResult;
+            }
+            case ColumnType.Real:
+            {
+                var parseResult = double.TryParse(stringValue, CultureInfo.InvariantCulture, out var value);
+                result = value;
+                return parseResult;
+            }
+            case ColumnType.Char:
+            {
+                var parseResult = char.TryParse(stringValue, out var value);
+                result = value;
+                return parseResult;
+            }
+            case ColumnType.String:
+            {
+                result = stringValue;
+                return true;
+            }
+            case ColumnType.DateTime:
+            {
+                string[] formats = { "dd.MM.yyyy" };
+                var parseResult = DateTime.TryParseExact(stringValue, formats, CultureInfo.InvariantCulture,
+                    DateTimeStyles.None, out var value);
+                if (!parseResult)
+                {
+                    result = null;
+                    return false;
+                }
+
+                result = value;
+                return true;
+            }
+            case ColumnType.DateInterval:
+            {
+                if (!stringValue.Contains(';'))
+                {
+                    result = null;
+                    return false;
+                }
+
+                var stringsplit = stringValue.Split(';');
+                string[] formats = { "dd.MM.yyyy" };
+
+                var parseResult1 = DateTime.TryParseExact(stringsplit[0], formats, CultureInfo.InvariantCulture,
+                    DateTimeStyles.None, out var value1);
+                var parseResult2 = DateTime.TryParseExact(stringsplit[1], formats, CultureInfo.InvariantCulture,
+                    DateTimeStyles.None, out var value2);
+
+                if (!parseResult1 || !parseResult2)
+                {
+                    result = null;
+                    return false;
+                }
+
+                result = new DateInterval(value1, value2);
+                return parseResult1 && parseResult2;
+            }
+
+            default:
+                result = null;
+                return false;
+        }
+    }
+
+    public int AddRow(IEnumerable<(string Name, string Value)> row)
+    {
+        return AddRow(CastRow(row));
+    }
+    
     public int AddRow(IDictionary<string, object?> row)
     {
         var id = _idCounter++;
@@ -72,6 +185,11 @@ public class Table
             return cell;
         }).ToList();
         return id;
+    }
+    
+    public void UpdateRow(int id, IEnumerable<(string Name, string Value)> row)
+    {
+        UpdateRow(id, CastRow(row));
     }
 
     public void UpdateRow(int id, IDictionary<string, object?> row)
