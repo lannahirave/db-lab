@@ -1,11 +1,12 @@
-﻿using System.Globalization;
-using DB;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using DB.WinFormsClient.DBAdapter;
 
-namespace WinFormsApp1;
+namespace DB.WinFormsClient;
 
 public static class ColumnExtension
 {
-    public static bool TryCast(this Column column, object? modifiedValue, out object? result)
+    public static bool TryCast(this ColumnScheme column, object? modifiedValue, [NotNullWhen(true)]out object? result)
     {
         if (modifiedValue is not string)
         {
@@ -18,7 +19,7 @@ public static class ColumnExtension
         if (string.IsNullOrEmpty(stringValue))
         {
             result = null;
-            return true;
+            return false;
         }
 
         switch (column.Type)

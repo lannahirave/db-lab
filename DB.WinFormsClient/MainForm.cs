@@ -1,52 +1,49 @@
-﻿using DB;
+﻿using DB.WinFormsClient.DBAdapter;
 
-namespace WinFormsApp1;
+namespace DB.WinFormsClient;
 
 public partial class MainForm : Form
 {
-    private readonly Db _db;
+    private readonly IBaseDb _db;
 
-    public MainForm(Db db)
+    public MainForm(IBaseDb dbAdapter)
     {
         InitializeComponent();
-        _db = db;
-        SaveDb.Click += async (sender, e) => { await SaveDb_Click(); };
+        _db = dbAdapter;
     }
 
-    private async void CreateTable(object sender, EventArgs e)
+    private void CreateTable(object sender, EventArgs e)
     {
         var form = new CreateTable(_db);
         form.TableCreated += CreateTableForm_TableCreated;
         form.Show();
     }
 
-    private void CreateTableForm_TableCreated(object sender, EventArgs e)
+    private void CreateTableForm_TableCreated(object? sender, EventArgs e)
     {
-        // This method will be called when the table is created
-        // Update your main form here
-        // For example, you might want to refresh a DataGridView or perform any other necessary updates
         RefreshMainForm();
     }
 
-    private void RefreshMainForm()
+    private async void RefreshMainForm()
     {
         dbInfo.Clear();
-        var text = "Database: " + _db.Schema.Name;
+        var text = "Database: " + _db.DbName;
         dbInfo.AppendText(text);
         dbInfo.AppendText(Environment.NewLine);
-        text = "Tables: " + _db.Schema.Tables.Count;
+        var tables = await _db.GetTables();
+        text = "Tables: " + tables.Count;
         dbInfo.AppendText(text);
         tableLayoutWhereTablesDisplay.Controls.Clear();
         // create a new table layout panel
-        foreach (var table in _db.Schema.Tables)
+        foreach (var table in tables)
         {
             var tableButton = new Button();
-            tableButton.Text = table.Key;
-            tableButton.Click += (sender, e) => OpenTable(table.Key);
+            tableButton.Text = table;
+            tableButton.Click += (_, _) => OpenTable(table);
             tableLayoutWhereTablesDisplay.Controls.Add(tableButton);
             var deleteButton = new Button();
-            deleteButton.Text = "Видалити";
-            deleteButton.Click += (sender, e) => DeleteTable(table.Key);
+            deleteButton.Text = @"Delete";
+            deleteButton.Click += async (_, _) => await DeleteTable(table);
             tableLayoutWhereTablesDisplay.Controls.Add(deleteButton);
         }
 
@@ -54,24 +51,19 @@ public partial class MainForm : Form
         tableLayout.ColumnCount = 2;
     }
 
-    private void OpenTable(string name)
+    private async void OpenTable(string name)
     {
-        var table = _db.Schema.Tables[name];
-        var form = new TableForm(table);
+        var form = new TableForm(_db, name);
+        await form.InitializeDataGridView1();
         form.Show();
     }
 
-    private void DeleteTable(string name)
+    private async Task DeleteTable(string name)
     {
-        _db.RemoveTable(name);
+        await _db.DeleteTable(name);
         RefreshMainForm();
     }
 
-    private async Task SaveDb_Click()
-    {
-        var fileSystem = Utility.Filesystem;
-        await _db.SaveAsync(fileSystem);
-    }
 
     private void CloseDb_Click(object sender, EventArgs e)
     {

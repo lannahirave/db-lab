@@ -1,15 +1,15 @@
-﻿using DB;
+﻿using DB.WinFormsClient.DBAdapter;
 
-namespace WinFormsApp1;
+namespace DB.WinFormsClient;
 
 public partial class CreateTable : Form
 {
     private Button _addColumnButton;
     private Button _createTableButton;
-    private readonly Db _db;
+    private readonly IBaseDb _db;
     private TextBox _tableNameTextBox;
 
-    public CreateTable(Db db)
+    public CreateTable(IBaseDb db)
     {
         _db = db;
         InitializeComponent();
@@ -23,10 +23,11 @@ public partial class CreateTable : Form
         var comboBoxReplica = new ComboBox();
 
         // comboBox1
-        // 
+        
+        var items = _db.GetTypes();
         comboBoxReplica.FormattingEnabled = true;
-        comboBoxReplica.Items.AddRange(new object[]
-            { "Integer", "Real", "Char", "String", "DateTime", "DateInterval" });
+        object[] itemsReplica = items.Select(x => x.ToString()).Cast<object>().ToArray();
+        comboBoxReplica.Items.AddRange(itemsReplica);
         comboBoxReplica.Location = new Point(3, 23);
         comboBoxReplica.Name = "comboBox1";
         comboBoxReplica.Size = new Size(121, 23);
@@ -94,15 +95,16 @@ public partial class CreateTable : Form
         tableLayoutPanel1.RowCount++;
         tableLayoutPanel1.Controls.Add(tableLayoutRowReplica, 0, tableLayoutPanel1.RowCount - 1);
         Console.Write(tableLayoutPanel1.RowCount);
-        button1Replica.Click += (o, args) => { tableLayoutPanel1.Controls.Remove(tableLayoutRowReplica); };
+        button1Replica.Click += (_, _) => { tableLayoutPanel1.Controls.Remove(tableLayoutRowReplica); };
     }
 
-    private void CreateTableButton_Click(object sender, EventArgs e)
+    private async void CreateTableButton_Click(object sender, EventArgs e)
     {
         var tableName = _tableNameTextBox.Text;
 
         var controlsFromTableLayoutPanel = tableLayoutPanel1.Controls;
-        var columns = new List<Column>();
+        var columns = new List<ColumnScheme>();
+        
         foreach (var controlObject in controlsFromTableLayoutPanel)
         {
             var control = (TableLayoutPanel)controlObject;
@@ -110,26 +112,11 @@ public partial class CreateTable : Form
             var textBox = (TextBox)control.Controls[3];
             var columnName = textBox.Text;
             var columnType = comboBox.Text;
-            var column = new Column
-            {
-                Name = columnName,
-                Type = columnType switch
-                {
-                    "Integer" => ColumnType.Integer,
-                    "Real" => ColumnType.Real,
-                    "Char" => ColumnType.Char,
-                    "String" => ColumnType.String,
-                    "DateTime" => ColumnType.DateTime,
-                    "DateInterval" => ColumnType.DateInterval,
-                    _ => throw new ArgumentOutOfRangeException()
-                }
-            };
-            columns.Add(column);
+            var column = new ColumnScheme(columnName, Enum.Parse<ColumnType>(columnType));
+           columns.Add(column);
         }
-
-        Console.Write(columns.Count);
-        var table = Table.Create(tableName, columns);
-        _db.AddTable(tableName, table);
+        
+        await _db.CreateTable(tableName, columns);
         Close();
         OnTableCreated(EventArgs.Empty);
     }
