@@ -22,6 +22,8 @@ class SelectDbScreen extends HookConsumerWidget {
             OpenLocalDbButton(),
             Divider(),
             OpenGrpcDbButton(),
+            Divider(),
+            OpenWSDLDbButton(),
           ],
         ),
       ),
@@ -139,3 +141,46 @@ class OpenGrpcDbButton extends HookConsumerWidget {
     );
   }
 }
+
+class OpenWSDLDbButton extends HookConsumerWidget {
+  const OpenWSDLDbButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final loader = ref.watch(dbLoaderProvider);
+
+    final urlController = useTextEditingController();
+
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: SizedBox(
+            width: 200,
+            child: TextField(
+              controller: urlController,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'URL',
+              ),
+            ),
+          ),
+        ),
+        SizedBox(
+          width: 200,
+          child: ElevatedButton(
+            onPressed: () async {
+              if (urlController.text.isEmpty) {
+                return;
+              }
+
+              await loader.connectWSDLDb(url: urlController.text);
+            },
+            child: const Text('Connect to WSDL DB'),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
