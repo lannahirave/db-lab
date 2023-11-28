@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\DB.WebService.Contract\DB.WebService.Contract.csproj" />
+      <ProjectReference Include="..\DB\DB.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="SoapCore" Version="1.1.0.39" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Contract\" />
+    </ItemGroup>
+
+</Project>
