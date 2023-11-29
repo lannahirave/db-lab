@@ -5,9 +5,9 @@ namespace DB;
 
 public class DbSchema
 {
-    public required string Name { get; set; }
+    public required string Name { get; init; }
 
-    public required Dictionary<string, Table> Tables { get; set; }
+    public required Dictionary<string, Table> Tables { get; init; }
 
     public void WriteBinary(BinaryWriter writer)
     {
@@ -67,7 +67,7 @@ public class Table
         return new Table(name, defaultColumns.Concat(columns).ToList());
     }
 
-    public IDictionary<string, object?> CastRow(IEnumerable<(string Name, string Value)> row)
+    private IDictionary<string, object?> CastRow(IEnumerable<(string Name, string Value)> row)
     {
         var rowDict = row.ToDictionary(x => x.Name, x => x.Value); 
         return _columns
@@ -77,12 +77,12 @@ public class Table
                 
                 if (!TryCast(x.Type, cell, out var result))
                     throw new Exception($"Column {x.Name} has wrong type");
-                return (Name: x.Name, Value: result);
+                return (x.Name, Value: result);
             })
             .ToDictionary(x => x.Name, x => x.Value)!;
     }
-    
-    public static bool TryCast(ColumnType type, object? modifiedValue, [NotNullWhen(true)] out object? result)
+
+    private static bool TryCast(ColumnType type, object? modifiedValue, [NotNullWhen(true)] out object? result)
     {
         if (modifiedValue is not string stringValue)
         {
@@ -123,7 +123,7 @@ public class Table
             }
             case ColumnType.DateTime:
             {
-                string[] formats = { "dd.MM.yyyy" };
+                string[] formats = { "dd.MM.yyyy", "dd.MM.yyyy HH:mm:ss", "dd.MM.yyyy H:mm:ss"  };
                 var parseResult = DateTime.TryParseExact(stringValue, formats, CultureInfo.InvariantCulture,
                     DateTimeStyles.None, out var value);
                 if (!parseResult)
@@ -143,12 +143,13 @@ public class Table
                     return false;
                 }
 
-                var stringsplit = stringValue.Split(';');
-                string[] formats = { "dd.MM.yyyy" };
+                var stringSplit = stringValue.Split(';');
+                
+                string[] formats = { "dd.MM.yyyy", "dd.MM.yyyy HH:mm:ss", "dd.MM.yyyy H:mm:ss"  };
 
-                var parseResult1 = DateTime.TryParseExact(stringsplit[0], formats, CultureInfo.InvariantCulture,
+                var parseResult1 = DateTime.TryParseExact(stringSplit[0], formats, CultureInfo.InvariantCulture,
                     DateTimeStyles.None, out var value1);
-                var parseResult2 = DateTime.TryParseExact(stringsplit[1], formats, CultureInfo.InvariantCulture,
+                var parseResult2 = DateTime.TryParseExact(stringSplit[1], formats, CultureInfo.InvariantCulture,
                     DateTimeStyles.None, out var value2);
 
                 if (!parseResult1 || !parseResult2)
@@ -230,8 +231,10 @@ public class Table
     {
         var tableName = reader.ReadString();
         var idCounter = reader.ReadInt32();
-        var table = new Table(tableName, new List<Column>());
-        table._idCounter = idCounter;
+        var table = new Table(tableName, new List<Column>())
+        {
+            _idCounter = idCounter
+        };
 
         var columnCount = reader.ReadInt32();
         for (var i = 0; i < columnCount; i++) table._columns.Add(Column.ReadBinary(reader));

@@ -49,7 +49,7 @@ public static class ColumnExtension
             }
             case ColumnType.DateTime:
             {
-                string[] formats = { "dd.MM.yyyy" };
+                string[] formats = { "dd.MM.yyyy", "dd.MM.yyyy HH:mm:ss", "dd.MM.yyyy H:mm:ss"  };
                 var parseResult = DateTime.TryParseExact(stringValue, formats, CultureInfo.InvariantCulture,
                     DateTimeStyles.None, out var value);
                 if (!parseResult)
@@ -70,7 +70,7 @@ public static class ColumnExtension
                 }
 
                 var stringsplit = stringValue.Split(';');
-                string[] formats = { "dd.MM.yyyy" };
+                string[] formats = { "dd.MM.yyyy", "dd.MM.yyyy HH:mm:ss", "dd.MM.yyyy H:mm:ss"  };
 
                 var parseResult1 = DateTime.TryParseExact(stringsplit[0], formats, CultureInfo.InvariantCulture,
                     DateTimeStyles.None, out var value1);

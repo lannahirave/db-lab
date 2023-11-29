@@ -13,10 +13,10 @@ var exists = fileSystem.File.Exists(path);
 var name = "db";
 var db = exists ? await Db.LoadAsync(fileSystem, path) : await Db.CreateAsync(fileSystem, path, name);
 
-var service = new DBService(db, fileSystem);
+var service = new DbService(db, fileSystem);
 
 var router = new DefaultTargetSelector();
-router.Register<IDbService, DBService>(service);
+router.Register<IDbService, DbService>(service);
 var engine = new Engine().CreateRequestHandler(router);
 
 new NamedPipeHost(engine).StartListening("DbPipe");
