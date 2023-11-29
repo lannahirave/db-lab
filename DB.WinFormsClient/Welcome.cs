@@ -72,13 +72,5 @@ public partial class Welcome : Form
         mainForm.Show();
     }
 
-    private void Welcome_Load(object sender, EventArgs e)
-    {
 
-    }
-
-    private void textBox1_TextChanged(object sender, EventArgs e)
-    {
-
-    }
 }

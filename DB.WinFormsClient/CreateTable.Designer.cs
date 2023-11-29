@@ -19,6 +19,10 @@
             }
             base.Dispose(disposing);
         }
+        void DeleteColumn(object sender, EventArgs e)
+        {
+            tableLayoutPanel1.Controls.Remove(tableLayoutPanel2);
+        }
 
         #region Windows Form Designer generated code
 
@@ -46,7 +50,7 @@
             // 
             _tableNameTextBox.Location = new Point(12, 12);
             _tableNameTextBox.Name = "_tableNameTextBox";
-            _tableNameTextBox.PlaceholderText = "Назва таблиці";
+            _tableNameTextBox.PlaceholderText = "Table's name";
             _tableNameTextBox.Size = new Size(398, 23);
             _tableNameTextBox.TabIndex = 1;
             // 
@@ -108,16 +112,15 @@
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new Size(121, 23);
             comboBox1.TabIndex = 6;
-            comboBox1.SelectedIndex = 0;
             // 
             // label2
             // 
             label2.AutoSize = true;
             label2.Location = new Point(131, 0);
             label2.Name = "label2";
-            label2.Size = new Size(89, 15);
+            label2.Size = new Size(83, 15);
             label2.TabIndex = 6;
-            label2.Text = "Назва колонки";
+            label2.Text = "Column name";
             // 
             // button1
             // 
@@ -125,12 +128,9 @@
             button1.Name = "button1";
             button1.Size = new Size(75, 22);
             button1.TabIndex = 6;
-            button1.Text = "Видалити";
+            button1.Text = "Delete";
             button1.UseVisualStyleBackColor = true;
-            button1.Click += (o, args) =>
-            {
-                tableLayoutPanel1.Controls.Remove(tableLayoutPanel2);
-            };
+            button1.Click += DeleteColumn;
             // 
             // textBox1
             // 
@@ -144,9 +144,9 @@
             label1.AutoSize = true;
             label1.Location = new Point(3, 0);
             label1.Name = "label1";
-            label1.Size = new Size(77, 15);
+            label1.Size = new Size(76, 15);
             label1.TabIndex = 6;
-            label1.Text = "Тип колонки";
+            label1.Text = "Column type";
             // 
             // CreateTable
             // 
