@@ -31,9 +31,9 @@
             OpenDB = new Button();
             NewDBName = new TextBox();
             CreateNewDB = new Button();
-            textBox1 = new TextBox();
+            RPCPipeName = new TextBox();
             ConnectToRpc = new Button();
-            gRPSHost = new TextBox();
+            gRPCHost = new TextBox();
             gRPCPort = new TextBox();
             ConnectTogRPC = new Button();
             SuspendLayout();
@@ -46,7 +46,7 @@
             OpenDB.TabIndex = 0;
             OpenDB.Text = "Open";
             OpenDB.UseVisualStyleBackColor = true;
-            OpenDB.Click += OpenDB_Click;
+            OpenDB.Click += OpenLocalDB_Click;
             // 
             // NewDBName
             // 
@@ -65,16 +65,16 @@
             CreateNewDB.TabIndex = 2;
             CreateNewDB.Text = "Create new";
             CreateNewDB.UseVisualStyleBackColor = true;
-            CreateNewDB.Click += CreateDb_Click;
+            CreateNewDB.Click += CreateLocalDb_Click;
             // 
-            // textBox1
+            // RPCPipeName
             // 
-            textBox1.Location = new Point(50, 229);
-            textBox1.Name = "textBox1";
-            textBox1.PlaceholderText = "Pipe name";
-            textBox1.Size = new Size(246, 23);
-            textBox1.TabIndex = 3;
-            textBox1.TextAlign = HorizontalAlignment.Center;
+            RPCPipeName.Location = new Point(50, 229);
+            RPCPipeName.Name = "RPCPipeName";
+            RPCPipeName.PlaceholderText = "Pipe name";
+            RPCPipeName.Size = new Size(246, 23);
+            RPCPipeName.TabIndex = 3;
+            RPCPipeName.TextAlign = HorizontalAlignment.Center;
             // 
             // ConnectToRpc
             // 
@@ -84,15 +84,16 @@
             ConnectToRpc.TabIndex = 4;
             ConnectToRpc.Text = "Connect to RPC server";
             ConnectToRpc.UseVisualStyleBackColor = true;
+            ConnectToRpc.Click += ConnectToRPC_Click;
             // 
-            // gRPSHost
+            // gRPCHost
             // 
-            gRPSHost.Location = new Point(50, 373);
-            gRPSHost.Name = "gRPSHost";
-            gRPSHost.PlaceholderText = "Host";
-            gRPSHost.Size = new Size(157, 23);
-            gRPSHost.TabIndex = 5;
-            gRPSHost.TextAlign = HorizontalAlignment.Center;
+            gRPCHost.Location = new Point(50, 373);
+            gRPCHost.Name = "gRPCHost";
+            gRPCHost.PlaceholderText = "Host";
+            gRPCHost.Size = new Size(157, 23);
+            gRPCHost.TabIndex = 5;
+            gRPCHost.TextAlign = HorizontalAlignment.Center;
             // 
             // gRPCPort
             // 
@@ -111,6 +112,7 @@
             ConnectTogRPC.TabIndex = 7;
             ConnectTogRPC.Text = "Connect to gRPC server";
             ConnectTogRPC.UseVisualStyleBackColor = true;
+            ConnectTogRPC.Click += ConnectTogRPC_Click;
             // 
             // Welcome
             // 
@@ -119,9 +121,9 @@
             ClientSize = new Size(353, 523);
             Controls.Add(ConnectTogRPC);
             Controls.Add(gRPCPort);
-            Controls.Add(gRPSHost);
+            Controls.Add(gRPCHost);
             Controls.Add(ConnectToRpc);
-            Controls.Add(textBox1);
+            Controls.Add(RPCPipeName);
             Controls.Add(CreateNewDB);
             Controls.Add(NewDBName);
             Controls.Add(OpenDB);
@@ -136,9 +138,9 @@
         private Button OpenDB;
         private TextBox NewDBName;
         private Button CreateNewDB;
-        private TextBox textBox1;
+        private TextBox RPCPipeName;
         private Button ConnectToRpc;
-        private TextBox gRPSHost;
+        private TextBox gRPCHost;
         private TextBox gRPCPort;
         private Button ConnectTogRPC;
     }
