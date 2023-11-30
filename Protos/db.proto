@@ -49,6 +49,12 @@ service DB {
       response_body: "rows",
     };
   };
+  rpc GetRowsFormatted (GetRowsRequest) returns (GetRowsFormattedResponse) {
+    option (google.api.http) = {
+      get: "/v1/{tableName}/rows-formatted",
+      response_body: "rows",
+    };
+  };
   rpc GetColumns (GetColumnsRequest) returns (GetColumnsResponse) {
     option (google.api.http) = {
       get: "/v1/{tableName}/columns",
@@ -74,6 +80,14 @@ message GetTablesResponse {
 
 message GetRowsResponse {
   repeated RowData rows = 1;
+}
+
+message GetRowsFormattedResponse {
+  repeated FormattedRow rows = 1;
+}
+
+message FormattedRow {
+  repeated string cells = 1;
 }
 
 message GetColumnsResponse {

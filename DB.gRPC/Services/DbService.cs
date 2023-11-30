@@ -229,6 +229,27 @@ public class DbService : Generated.DB.DBBase
         return Task.FromResult(response);
     }
 
+    public override Task<GetRowsFormattedResponse> GetRowsFormatted(GetRowsRequest request, ServerCallContext context)
+    {
+        if (!_db.Schema.Tables.TryGetValue(request.TableName, out var table))
+        {
+            return Task.FromResult(new GetRowsFormattedResponse());
+        }
+
+        var response = new GetRowsFormattedResponse
+        {
+            Rows =
+            {
+                table.Rows.Select(row => new FormattedRow
+                {
+                    Cells = { row.Select(x => x.ToString()) }
+                })
+            }
+        };
+        
+        return Task.FromResult(response);
+    }
+
     private static ColumnType ToDbColumnType(Generated.ColumnType columnType)
     {
         return columnType switch
