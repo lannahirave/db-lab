@@ -1,3 +1,6 @@
+using CoreRPC;
+using CoreRPC.Transport.NamedPipe;
+using DB.RPC.Common;
 using DB.WinFormsClient.DBAdapter;
 
 namespace DB.WinFormsClient;
@@ -9,12 +12,41 @@ public partial class Welcome : Form
         InitializeComponent();
     }
 
+    private async void ConnectToRPC_Click(object sender, EventArgs e)
+    {
+        var pipeName = RPCPipeName.Text;
+        if (string.IsNullOrWhiteSpace(pipeName))
+        {
+            MessageBox.Show(@"Please enter a pipe name.");
+            return;
+        }
+        var transport = new NamedPipeClientTransport(pipeName);
 
-    private async void CreateDb_Click(object sender, EventArgs e)
+        var proxy = new Engine().CreateProxy<IDbService>(transport);
+        
+        IBaseDb dbAdapter = new RpcDb(proxy);
+        
+        
+        
+        OpenMainFormIDbAdapter(dbAdapter);
+    }
+
+    private async void ConnectTogRPC_Click(object sender, EventArgs e)
+    {
+        var host = gRPCHost.Text;
+        var port = gRPCPort.Text;
+        if (string.IsNullOrWhiteSpace(host) || string.IsNullOrWhiteSpace(port))
+        {
+            MessageBox.Show(@"Please enter a host and a port.");
+            return;
+        }
+        
+    }
+    private async void CreateLocalDb_Click(object sender, EventArgs e)
     {
         if (string.IsNullOrWhiteSpace(NewDBName.Text))
         {
-            MessageBox.Show("Please enter a database name.");
+            MessageBox.Show(@"Please enter a database name.");
             return;
         }
 
@@ -34,7 +66,7 @@ public partial class Welcome : Form
             try
             {
                 var db = await Db.CreateAsync(Utility.Filesystem, dbPath, dbName);
-                OpenMainForm(db);
+                OpenMainFormLocalDb(db);
             }
             catch (Exception ex)
             {
@@ -43,7 +75,7 @@ public partial class Welcome : Form
         }
     }
 
-    private async void OpenDB_Click(object sender, EventArgs e)
+    private async void OpenLocalDB_Click(object sender, EventArgs e)
     {
         var openFileDialog = new OpenFileDialog
         {
@@ -57,7 +89,7 @@ public partial class Welcome : Form
             try
             {
                 var db = await Db.LoadAsync(Utility.Filesystem, openFileDialog.FileName);
-                OpenMainForm(db);
+                OpenMainFormLocalDb(db);
             }
             catch (Exception ex)
             {
@@ -65,20 +97,17 @@ public partial class Welcome : Form
             }
     }
 
-    private void OpenMainForm(Db db)
+    private void OpenMainFormLocalDb(Db db)
     {
         IBaseDb dbAdapter = new LocalDb(db);
+        OpenMainFormIDbAdapter(dbAdapter);
+    }
+    
+    private void OpenMainFormIDbAdapter(IBaseDb dbAdapter)
+    {
         var mainForm = new MainForm(dbAdapter);
         mainForm.Show();
     }
 
-    private void Welcome_Load(object sender, EventArgs e)
-    {
 
-    }
-
-    private void textBox1_TextChanged(object sender, EventArgs e)
-    {
-
-    }
 }

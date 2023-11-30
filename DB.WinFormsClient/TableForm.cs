@@ -49,6 +49,12 @@ public partial class TableForm : Form
         dataGridView1.CellValueChanged += DataGridView1_CellValueChanged;
         dataGridView1.CellBeginEdit += DataGridView1_CellBeginEdit;
         dataGridView1.CellEndEdit += DataGridView1_CellEndEdit;
+        
+        foreach(DataGridViewColumn column in dataGridView1.Columns)
+        {
+    
+            column.SortMode = DataGridViewColumnSortMode.Automatic;
+        }
     }
 
     private void DataGridView1_UserDeletingRow(object? sender, DataGridViewRowCancelEventArgs e)
