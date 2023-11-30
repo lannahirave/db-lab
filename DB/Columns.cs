@@ -23,7 +23,12 @@ public static class ColumnUtils
                 writer.Write((double)value);
                 break;
             case ColumnType.Char:
-                writer.Write((char)value);
+                if (value is string { Length: > 0 } stringValue)
+                    writer.Write(char.Parse(stringValue));
+                else if (value is char charValue)
+                    writer.Write(charValue);
+                else
+                    throw new ArgumentException("Invalid char value");
                 break;
             case ColumnType.String:
                 writer.Write((string)value);

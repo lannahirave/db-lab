@@ -56,7 +56,7 @@ public class Db
 
     public async Task SaveAsync(IFileSystem fileSystem)
     {
-        var file = EnsureExists(fileSystem, Path);
+        await using var file = EnsureExists(fileSystem, Path);
 
         using var stream = new MemoryStream();
         var writer = new BinaryWriter(stream);
@@ -70,7 +70,7 @@ public class Db
 
     public static async Task<Db> LoadAsync(IFileSystem fileSystem, string path)
     {
-        var file = EnsureExists(fileSystem, path);
+        await using var file = EnsureExists(fileSystem, path);
 
         var reader = new BinaryReader(file);
         var schema = DbSchema.ReadBinary(reader);
