@@ -2,6 +2,7 @@ using CoreRPC;
 using CoreRPC.Transport.NamedPipe;
 using DB.RPC.Common;
 using DB.WinFormsClient.DBAdapter;
+using Grpc.Net.Client;
 
 namespace DB.WinFormsClient;
 
@@ -26,8 +27,6 @@ public partial class Welcome : Form
         
         IBaseDb dbAdapter = new RpcDb(proxy);
         
-        
-        
         OpenMainFormIDbAdapter(dbAdapter);
     }
 
@@ -40,6 +39,10 @@ public partial class Welcome : Form
             MessageBox.Show(@"Please enter a host and a port.");
             return;
         }
+        var channel = GrpcChannel.ForAddress($"http://{host}:{port}");
+        var client = new DB.gRPC.Generated.DB.DBClient(channel);
+        IBaseDb dbAdapter = new GRpcDb(client);
+        OpenMainFormIDbAdapter(dbAdapter);
         
     }
     private async void CreateLocalDb_Click(object sender, EventArgs e)

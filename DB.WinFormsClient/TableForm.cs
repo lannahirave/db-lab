@@ -194,10 +194,10 @@ public partial class TableForm : Form
             {
                 // Show error message and paint the cell red for 1 second
                 MessageBox.Show($@"Cannot cast {modifiedValue} to {column.Type}");
-                dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.Red;
+                dataGridView1.Rows[e.RowIndex].Cells[i].Style.BackColor = Color.Red;
                 await Task.Delay(1000).ContinueWith(_ =>
                 {
-                    dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor = Color.White;
+                    dataGridView1.Rows[e.RowIndex].Cells[i].Style.BackColor = Color.White;
                 });
                 _isRowBeingAdded = false;
                 return;
