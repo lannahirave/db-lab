@@ -23,7 +23,7 @@ public partial class CreateTable : Form
         var comboBoxReplica = new ComboBox();
 
         // comboBox1
-        
+
         var items = _db.GetTypes();
         comboBoxReplica.FormattingEnabled = true;
         object[] itemsReplica = items.Select(x => x.ToString()).Cast<object>().ToArray();
@@ -42,7 +42,7 @@ public partial class CreateTable : Form
         label2Replica.Name = "label2";
         label2Replica.Size = new Size(89, 15);
         label2Replica.TabIndex = 6;
-        label2Replica.Text = "Назва колонки";
+        label2Replica.Text = "Column name";
         // 
         // button1
         // 
@@ -51,7 +51,7 @@ public partial class CreateTable : Form
         button1Replica.Name = "button1";
         button1Replica.Size = new Size(75, 22);
         button1Replica.TabIndex = 6;
-        button1Replica.Text = "Видалити";
+        button1Replica.Text = "Delete";
         button1Replica.UseVisualStyleBackColor = true;
 
         // 
@@ -72,7 +72,7 @@ public partial class CreateTable : Form
         label1Replica.Name = "label1";
         label1Replica.Size = new Size(77, 15);
         label1Replica.TabIndex = 6;
-        label1Replica.Text = "Тип колонки";
+        label1Replica.Text = "Column type";
 
 
         var tableLayoutRowReplica = new TableLayoutPanel();
@@ -104,7 +104,7 @@ public partial class CreateTable : Form
 
         var controlsFromTableLayoutPanel = tableLayoutPanel1.Controls;
         var columns = new List<ColumnScheme>();
-        
+
         foreach (var controlObject in controlsFromTableLayoutPanel)
         {
             var control = (TableLayoutPanel)controlObject;
@@ -113,9 +113,9 @@ public partial class CreateTable : Form
             var columnName = textBox.Text;
             var columnType = comboBox.Text;
             var column = new ColumnScheme(columnName, Enum.Parse<ColumnType>(columnType));
-           columns.Add(column);
+            columns.Add(column);
         }
-        
+
         await _db.CreateTable(tableName, columns);
         Close();
         OnTableCreated(EventArgs.Empty);

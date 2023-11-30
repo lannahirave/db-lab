@@ -50,7 +50,7 @@
             addTableToDb.Name = "addTableToDb";
             addTableToDb.Size = new Size(196, 23);
             addTableToDb.TabIndex = 1;
-            addTableToDb.Text = "Створити нову таблицю";
+            addTableToDb.Text = "Create new table";
             addTableToDb.UseVisualStyleBackColor = true;
             addTableToDb.Click += CreateTable;
             // 
@@ -73,7 +73,7 @@
             CloseDb.Name = "CloseDb";
             CloseDb.Size = new Size(146, 23);
             CloseDb.TabIndex = 4;
-            CloseDb.Text = "Закрити дб";
+            CloseDb.Text = "Close db";
             CloseDb.UseVisualStyleBackColor = true;
             CloseDb.Click += CloseDb_Click;
             // 
@@ -88,7 +88,7 @@
             Controls.Add(addTableToDb);
             Controls.Add(dbInfo);
             Name = "MainForm";
-            Text = "MainForm";
+            Text = "Database viewer";
             Load += MainForm_Load;
             ResumeLayout(false);
             PerformLayout();

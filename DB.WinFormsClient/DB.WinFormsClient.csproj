@@ -9,7 +9,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\DB.RPC.Common\DB.RPC.Common.csproj" />
         <ProjectReference Include="..\DB\DB.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="CoreRPC" Version="0.6.3" />
     </ItemGroup>
 
 </Project>
