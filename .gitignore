@@ -7,3 +7,4 @@ DB.gRPC/db
 .idea/
 .vs/
 *.csproj.user
+*.user
