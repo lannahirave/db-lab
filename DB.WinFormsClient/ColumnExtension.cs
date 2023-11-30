@@ -92,4 +92,34 @@ public static class ColumnExtension
                 return false;
         }
     }
+    
+    public static gRPC.Generated.ColumnType ConvertDbColumnTypeToGRpcColumnType(ColumnType columnType)
+    {
+        return columnType switch
+        {
+            ColumnType.Integer => gRPC.Generated.ColumnType.Integer,
+            ColumnType.Real => gRPC.Generated.ColumnType.Real,
+            ColumnType.String => gRPC.Generated.ColumnType.String,
+            ColumnType.Char => gRPC.Generated.ColumnType.Char,
+            ColumnType.DateTime => gRPC.Generated.ColumnType.DateTime,
+            ColumnType.DateInterval => gRPC.Generated.ColumnType.DateTimeInterval,
+            _ => throw new ArgumentException("Unknown column type")
+        };
+    }
+    
+    public static ColumnType ConvertGRpcColumnTypeToDbColumnType(gRPC.Generated.ColumnType columnType)
+    {
+        return columnType switch
+        {
+            gRPC.Generated.ColumnType.Integer => ColumnType.Integer,
+            gRPC.Generated.ColumnType.Real => ColumnType.Real,
+            gRPC.Generated.ColumnType.String => ColumnType.String,
+            gRPC.Generated.ColumnType.Char => ColumnType.Char,
+            gRPC.Generated.ColumnType.DateTime => ColumnType.DateTime,
+            gRPC.Generated.ColumnType.DateTimeInterval => ColumnType.DateInterval,
+            _ => throw new ArgumentException("Unknown column type")
+        };
+    }
+    
+    
 }

@@ -9,6 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\DB.gRPC.Client\DB.gRPC.Client.csproj" />
         <ProjectReference Include="..\DB.RPC.Common\DB.RPC.Common.csproj" />
         <ProjectReference Include="..\DB\DB.csproj"/>
     </ItemGroup>
