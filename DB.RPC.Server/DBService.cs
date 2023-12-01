@@ -58,8 +58,7 @@ public class DbService : IDbService
 
     public async Task UpdateRow(string tableName, int id, IEnumerable<CellInput> row)
     {
-        _db.Schema.Tables[tableName].UpdateRow(id,
-            row.ToDictionary(x => x.ColumnName, x => (object?)x.Value ?? (object?)x.Value ?? (object?)x.Value));
+        _db.Schema.Tables[tableName].UpdateRow(id, row.Select(x => (x.ColumnName, x.Value)));
         await _db.SaveAsync(_fileSystem);
     }
 }
