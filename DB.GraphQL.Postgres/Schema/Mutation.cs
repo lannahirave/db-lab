@@ -30,6 +30,11 @@ public class Mutation
 
         foreach (var column in input.Columns)
         {
+            if (!NameValidator.IsValid(column.Name))
+            {
+                return new AddTablePayload($"Invalid column name ${column.Name}");
+            }
+            
             switch (column.Type)
             {
                 case ColumnType.String:
